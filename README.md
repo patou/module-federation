@@ -53,7 +53,30 @@ npm run build
 npm run preview
 ```
 
-L’aperçu utilise les ports **5000**, **5001** et **5002**, comme le mode développement. `preview` ne remplace pas une configuration de déploiement : les adresses des remotes et leurs origines sont actuellement configurées pour `localhost`.
+L’aperçu utilise les ports **5000**, **5001** et **5002**, comme le mode développement. Sans configuration de déploiement, les adresses des remotes restent locales.
+
+## GitHub Actions et GitHub Pages
+
+Le workflow [pages.yml](.github/workflows/pages.yml) :
+
+1. installe les dépendances avec `npm ci` sous Node 24 ;
+2. vérifie les types, lance les tests et construit les trois applications à chaque push et pull request ;
+3. sur la **branche par défaut du dépôt**, construit le site avec son URL GitHub Pages et publie l’artefact uniquement si les vérifications réussissent.
+
+Pour l’activer, poussez ce projet dans un dépôt GitHub, puis choisissez **Settings → Pages → Build and deployment → Source : GitHub Actions**. Le workflow peut aussi être lancé manuellement depuis l’onglet Actions. Les pull requests et les branches secondaires ne sont pas déployées.
+
+Le shell est publié à la racine du site, et les remotes sous `remotes/vue/` et `remotes/angular/`. L’action `configure-pages` fournit l’URL réelle du site : préfixe de dépôt et domaine personnalisé sont pris en compte automatiquement.
+
+GitHub Pages ne propose pas de fallback SPA configurable. Le build déployé utilise donc des URL avec hash, par exemple `https://utilisateur.github.io/depot/#/clients/1?source=liste#fiche`. Le rechargement et les liens directs fonctionnent sans page 404 de contournement. **Les routes métier restent `/clients/:id`** : aucune modification des composants ou de la table de migration n’est nécessaire. En développement local, le routage conserve ses URL habituelles sans hash.
+
+Pour construire manuellement ce même artefact :
+
+```sh
+PAGES_BASE_URL=https://utilisateur.github.io/depot/ VITE_ROUTER_MODE=hash npm run build
+npm run package:pages
+```
+
+Le dossier `dist/pages/` contient alors tout le site. `package:pages` remplace uniquement ce dossier d’assemblage et nécessite les trois builds déjà produits. Pour revenir aux builds locaux, exécutez `npm run build` sans ces variables.
 
 ## Documentation
 

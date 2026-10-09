@@ -50,6 +50,7 @@ watch(() => [props.owner, props.path, retry.value] as const, ([owner, path]) => 
       if (!container.value) throw new Error("Conteneur du remote absent");
       const next = await remote.mount(container.value, {
         initialPath: path,
+        resolveHref: (path) => router.resolve(path).href,
         onNavigate: (target) => {
           if (!stopped && handle === next) void router.push(target);
         },

@@ -1,6 +1,6 @@
-import { LocationStrategy } from "@angular/common";
+import { APP_BASE_HREF, LocationStrategy } from "@angular/common";
 import type { ApplicationConfig } from "@angular/core";
-import { provideRouter, withDisabledInitialNavigation, type Routes } from "@angular/router";
+import { provideRouter, withDisabledInitialNavigation, withHashLocation, type Routes } from "@angular/router";
 import type { RemoteOptions } from "@demo/contracts";
 import { routes } from "./app.routes";
 import { delegateNavigation, MemoryLocationStrategy } from "../navigation";
@@ -14,8 +14,16 @@ export function createAppConfig(options?: RemoteOptions): ApplicationConfig {
   }] : routes;
   return {
     providers: [
-      provideRouter(applicationRoutes, withDisabledInitialNavigation()),
-      ...(options ? [{ provide: LocationStrategy, useClass: MemoryLocationStrategy }] : []),
+      provideRouter(applicationRoutes, withDisabledInitialNavigation(),
+        ...(!options && import.meta.env.VITE_ROUTER_MODE === "hash" ? [withHashLocation()] : [])),
+      ...(options ? [{
+        provide: LocationStrategy,
+        useFactory: () => new MemoryLocationStrategy(options.resolveHref),
+      }] : [{
+        provide: APP_BASE_HREF,
+        useValue: import.meta.env.VITE_ROUTER_MODE === "hash"
+          ? "/" : new URL(import.meta.env.BASE_URL, location.origin).pathname,
+      }]),
     ],
   };
 }

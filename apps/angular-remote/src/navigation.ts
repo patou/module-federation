@@ -16,12 +16,15 @@ export function delegateNavigation(onNavigate: RemoteOptions["onNavigate"]): Can
 
 // The integrated router must never write to the shell's browser history.
 export class MemoryLocationStrategy extends LocationStrategy {
+  constructor(private readonly resolveHref: (path: string) => string = (path) => path) {
+    super();
+  }
   private currentPath = "/";
   private currentState: unknown = null;
 
   override path(): string { return this.currentPath; }
   override getState(): unknown { return this.currentState; }
-  override prepareExternalUrl(path: string): string { return path; }
+  override prepareExternalUrl(path: string): string { return this.resolveHref(path); }
   override getBaseHref(): string { return "/"; }
   override pushState(state: unknown, _title: string, url: string, query: string): void {
     this.currentPath = url + (query ? `?${query}` : "");

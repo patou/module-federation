@@ -16,9 +16,9 @@ Le shell contient le menu principal. Il le construit à partir de `routeOwnershi
 
 **Seul le shell contrôle l’historique et l’URL du navigateur lorsque l’application est intégrée.** L’URL peut comprendre un chemin, une query et un fragment ; le shell transmet le chemin courant au remote sélectionné. Les routeurs des remotes intégrés restent internes et ne remplacent pas l’URL du shell.
 
-- Le shell crée son routeur Vue avec `createWebHistory()` dans [main.ts](../apps/shell/src/main.ts).
+- Le shell crée son routeur Vue avec `createWebHistory()` dans [main.ts](../apps/shell/src/main.ts), ou `createWebHashHistory()` pour GitHub Pages.
 - Le remote Vue intégré crée son routeur avec `createMemoryHistory()` dans [router.ts](../apps/vue-remote/src/router.ts). Son point d’entrée autonome, [main.ts](../apps/vue-remote/src/main.ts), utilise `makeRouter(false)` et donc l’historique Web.
-- Le remote Angular intégré reçoit `MemoryLocationStrategy`, définie dans [navigation.ts](../apps/angular-remote/src/navigation.ts), par le bootstrap fédéré [bootstrap.ts](../apps/angular-remote/src/bootstrap.ts). Le démarrage autonome via [main.ts](../apps/angular-remote/src/main.ts) ne fournit pas ces options et utilise la stratégie Angular standard.
+- Le remote Angular intégré reçoit `MemoryLocationStrategy`, définie dans [navigation.ts](../apps/angular-remote/src/navigation.ts), par le bootstrap fédéré [bootstrap.ts](../apps/angular-remote/src/bootstrap.ts). Le démarrage autonome via [main.ts](../apps/angular-remote/src/main.ts) ne fournit pas ces options et utilise la stratégie Angular standard, ou `withHashLocation()` pour GitHub Pages.
 
 Ces modes permettent de tester chaque remote seul tout en évitant, dans le mode intégré, que deux routeurs écrivent simultanément dans l’historique du navigateur.
 
@@ -43,6 +43,7 @@ Les types partagés se trouvent dans [packages/contracts/src/index.ts](../packag
 interface RemoteOptions {
   initialPath: string;
   onNavigate: (path: string) => void;
+  resolveHref?: (path: string) => string;
 }
 
 interface RemoteHandle {
@@ -69,6 +70,8 @@ En mode intégré, un adaptateur au niveau du router délègue les navigations a
 
 Le shell choisit le propriétaire puis synchronise le router du remote. Même une navigation programmée avec `router.navigateByUrl` ou `router.push` passe par ce mécanisme. Les liens modifiés (Cmd/Ctrl-clic, nouvel onglet) restent de vrais liens vers les URL publiques.
 
+Le callback `resolveHref` fournit l’adresse publique d’un lien depuis le router du shell. L’historique mémoire Vue et la localisation mémoire Angular l’utilisent pour générer les `href` natifs corrects, notamment sous un préfixe de dépôt avec `#/clients` sur GitHub Pages. Une URL de ressource distante ne doit pas être confondue avec une URL de navigation métier.
+
 En mode autonome, ces gardes de délégation ne sont pas installées : les mêmes composants naviguent normalement. Le code des pages n’a donc pas à changer entre autonome et intégré. En revanche, migrer une page Angular en Vue implique toujours de réécrire son template et sa logique dans le nouveau framework ; `routerLink` Angular n’est pas une directive Vue.
 
 Cette démonstration délègue des navigations ordinaires, pas toutes les options avancées : `replaceUrl`/`replace`, `skipLocationChange`, `state` et les navigations relatives doivent être examinés si votre application en dépend. Le contrat ne transmet ici qu’une URL ; une demande `replace` du remote produit donc une navigation standard du shell. La localisation mémoire Angular n’implémente pas un second historique : précédent/suivant appartient au shell, pas à `Location.back()` dans le remote.
@@ -83,9 +86,9 @@ En cas d’échec de chargement ou de montage, le shell affiche l’erreur et un
 
 ## Limites et déploiement
 
-- Les entrées fédérées du shell pointent explicitement vers `http://localhost:5001/remoteEntry.js` et `http://localhost:5002/remoteEntry.js` dans [vite.config.ts](../apps/shell/vite.config.ts). Les configurations Vite des remotes utilisent aussi des bases fixes sur ces origines.
+- Sans variable de déploiement, les entrées fédérées du shell pointent vers `http://localhost:5001/remoteEntry.js` et `http://localhost:5002/remoteEntry.js`. [public-bases.ts](../build/public-bases.ts) centralise les bases utilisées par les trois configurations Vite. Avec `PAGES_BASE_URL`, les remotes et leurs assets sont publiés sous `remotes/vue/` et `remotes/angular/` sur le même site.
 - Pour un déploiement réel, configurez les adresses des remote entries et les bases publiques des assets selon l’environnement. Les serveurs qui servent les remotes doivent répondre avec les en-têtes CORS autorisant leur chargement depuis l’origine du shell.
-- Le shell utilise l’historique Web. Un serveur de production doit renvoyer le document de l’application shell pour ses URL profondes (fallback SPA), tout en servant correctement les entrées et les assets de chaque remote.
+- Avec l’historique Web local, un serveur doit renvoyer le document du shell pour les URL profondes (fallback SPA). Le workflow GitHub Pages définit `VITE_ROUTER_MODE=hash` : les URL profondes sont dans le hash et ne nécessitent pas ce fallback. Les points d’entrée autonomes des deux remotes utilisent aussi le hash dans ce build.
 - Le HMR est utile en développement, mais les mises à jour à chaud à travers toutes les frontières de remotes fédérés ne sont pas garanties ; un rechargement de page ou le redémarrage du serveur concerné peut être nécessaire.
 - L’exemple n’implémente ni authentification, ni backend, ni SSR, ni migration ou synchronisation d’état entre Angular et Vue.
 - Le sélecteur du shell garde le scénario dans un `ref` Vue initialisé à `partial`. Il n’y a ni persistance, ni configuration serveur, ni feature flag de production.

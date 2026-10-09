@@ -8,6 +8,7 @@
     "dev": "concurrently -k -n shell,vue,angular \"npm run dev -w @demo/shell\" \"npm run dev -w @demo/vue-remote\" \"npm run dev -w @demo/angular-remote\"",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
+    "package:pages": "node scripts/package-pages.mjs",
     "preview": "concurrently -k -n shell,vue,angular \"npm run preview -w @demo/shell\" \"npm run preview -w @demo/vue-remote\" \"npm run preview -w @demo/angular-remote\"",
     "test": "node --experimental-strip-types --test tests/*.test.ts"
   },

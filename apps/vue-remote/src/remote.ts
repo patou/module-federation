@@ -5,7 +5,7 @@ import { makeRouter } from "./router";
 import { bridgeNavigation } from "./router-bridge";
 
 export async function mount(container: HTMLElement, options: RemoteOptions): Promise<RemoteHandle> {
-  const router = makeRouter(true);
+  const router = makeRouter(true, options.resolveHref);
   await router.push(options.initialPath);
   const bridge = bridgeNavigation(router, options.onNavigate);
   const app = createApp(App);

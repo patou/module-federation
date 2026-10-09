@@ -1,9 +1,10 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { federation } from "@module-federation/vite";
+import { publicBases } from "../../build/public-bases";
 
 export default defineConfig({
-  base: "http://localhost:5001/",
+  base: publicBases(process.env.PAGES_BASE_URL).vue,
   plugins: [
     vue(),
     federation({

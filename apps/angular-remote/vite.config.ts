@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
 import angular from "@analogjs/vite-plugin-angular";
 import { federation } from "@module-federation/vite";
+import { publicBases } from "../../build/public-bases";
 
 const angularShare = { singleton: true, requiredVersion: "21.2.0" };
 
 export default defineConfig({
-  base: "http://localhost:5002/",
+  base: publicBases(process.env.PAGES_BASE_URL).angular,
   resolve: { mainFields: ["module"] },
   plugins: [
     angular({ tsconfig: "./tsconfig.app.json" }),

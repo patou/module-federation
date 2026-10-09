@@ -25,7 +25,9 @@ export async function bootstrap(
     const router = app.injector.get(Router);
     // Neither initial nor shell-driven navigation emits a host navigation request.
     await router.navigateByUrl(
-      options?.initialPath ?? `${location.pathname}${location.search}${location.hash}`,
+      options?.initialPath ?? (import.meta.env.VITE_ROUTER_MODE === "hash"
+        ? location.hash.slice(1) || "/"
+        : `${location.pathname}${location.search}${location.hash}`),
       { replaceUrl: true, info: shellNavigation },
     );
     return {
