@@ -1,0 +1,13 @@
+<section class="remote">
+  <header class="remote-header">
+    <div><span class="eyebrow">APPLICATION HISTORIQUE</span><h1>Relation clients</h1></div>
+    <span class="technology">Angular 21</span>
+  </header>
+  <nav aria-label="Navigation de l’application Angular">
+    <a routerLink="/clients" routerLinkActive="active" ariaCurrentWhenActive="page">Clients</a>
+    <a routerLink="/rapports" routerLinkActive="active" ariaCurrentWhenActive="page">Rapports</a>
+    <a routerLink="/parametres" routerLinkActive="active" ariaCurrentWhenActive="page">Paramètres</a>
+  </nav>
+  <div class="content"><router-outlet /></div>
+  <footer>Ce périmètre est rendu par le remote Angular, sans iframe.</footer>
+</section>

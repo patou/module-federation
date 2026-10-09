@@ -1,0 +1,14 @@
+<header><h2>Clients</h2><p>Deux clients fictifs pour explorer le parcours migré.</p></header>
+<div class="client-grid">
+  @for (client of clients; track client.id) {
+    <article>
+      <span class="badge">{{ client.status }}</span>
+      <h3>{{ client.name }}</h3>
+      <p>{{ client.company }}</p>
+      <p>{{ client.email }}</p>
+      <a [routerLink]="['/clients', client.id]" [queryParams]="{ source: 'liste' }" fragment="fiche">
+        Voir la fiche de {{ client.name }} →
+      </a>
+    </article>
+  }
+</div>

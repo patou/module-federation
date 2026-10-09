@@ -1,0 +1,15 @@
+:host { display: block; }
+h2 { margin: 0 0 6px; font-size: 23px; }
+h3 { margin: 10px 0 6px; font-size: 18px; }
+header { margin-bottom: 24px; }
+p { color: #5c6b80; margin: 8px 0; overflow-wrap: anywhere; }
+article { padding: 22px; border: 1px solid #e0e6ee; border-radius: 10px; background: #fcfdff; }
+.client-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 18px; }
+.badge { display: inline-block; padding: 2px 9px; background: #e3f2ee; color: #125343; border-radius: 20px; font-size: 12px; }
+a { color: #176c5c; font-weight: 600; text-underline-offset: 3px; }
+a:focus-visible { outline: 3px solid #176c5c; outline-offset: 3px; }
+dl { display: grid; grid-template-columns: minmax(110px, 1fr) 2fr; gap: 16px; margin: 16px 0; }
+dt { color: #5c6b80; }
+dd { margin: 0; overflow-wrap: anywhere; }
+.metric { font-size: 38px; color: #176c5c; }
+@media (max-width: 500px) { dl { grid-template-columns: 1fr; gap: 6px; } dd { margin-bottom: 12px; } }

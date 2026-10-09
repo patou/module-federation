@@ -1,0 +1,16 @@
+<a routerLink="/clients">← Retour aux clients</a>
+@if (client(); as client) {
+  <header id="fiche"><h2>{{ client.name }}</h2><p>Fiche client · #{{ client.id }}</p></header>
+  <article>
+    <span class="badge">{{ client.status }}</span>
+    <dl>
+      <dt>Entreprise</dt><dd>{{ client.company }}</dd>
+      <dt>Adresse e-mail</dt><dd>{{ client.email }}</dd>
+      <dt>Responsable</dt><dd>Équipe relation clients</dd>
+    </dl>
+    <p>Source : {{ query()?.get("source") ?? "accès direct" }} · fragment : {{ fragment() ?? "aucun" }}</p>
+    <p>Les données de cette démonstration sont entièrement fictives.</p>
+  </article>
+} @else {
+  <header><h2>Client introuvable</h2><p>Cette fiche n’existe pas dans la démonstration.</p></header>
+}

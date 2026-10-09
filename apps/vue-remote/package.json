@@ -1,0 +1,12 @@
+{
+  "name": "@demo/vue-remote",
+  "private": true,
+  "type": "module",
+  "dependencies": { "@demo/contracts": "*" },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview --port 5001 --strictPort"
+  }
+}
