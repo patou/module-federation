@@ -2,14 +2,19 @@
   "name": "migration-federation-demo",
   "type": "module",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
-  "engines": { "node": "^22.18.0 || >=24.0.0" },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": "^22.18.0 || >=24.0.0"
+  },
   "scripts": {
-    "dev": "concurrently -k -n shell,vue,angular \"npm run dev -w @demo/shell\" \"npm run dev -w @demo/vue-remote\" \"npm run dev -w @demo/angular-remote\"",
+    "dev": "concurrently -k -n shell,vue-clients,angular-clients,vue-backoffice,angular-backoffice \"npm run dev -w @demo/shell\" \"npm run dev -w @demo/vue-clients\" \"npm run dev -w @demo/angular-clients\" \"npm run dev -w @demo/vue-backoffice\" \"npm run dev -w @demo/angular-backoffice\"",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
-    "package:pages": "node scripts/package-pages.mjs",
-    "preview": "concurrently -k -n shell,vue,angular \"npm run preview -w @demo/shell\" \"npm run preview -w @demo/vue-remote\" \"npm run preview -w @demo/angular-remote\"",
+    "package:pages": "node --experimental-strip-types scripts/package-pages.ts",
+    "preview": "concurrently -k -n shell,vue-clients,angular-clients,vue-backoffice,angular-backoffice \"npm run preview -w @demo/shell\" \"npm run preview -w @demo/vue-clients\" \"npm run preview -w @demo/angular-clients\" \"npm run preview -w @demo/vue-backoffice\" \"npm run preview -w @demo/angular-backoffice\"",
     "test": "node --experimental-strip-types --test tests/*.test.ts"
   },
   "dependencies": {

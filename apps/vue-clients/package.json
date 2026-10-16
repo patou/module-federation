@@ -1,0 +1,17 @@
+{
+  "name": "@demo/vue-clients",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@demo/contracts": "*",
+    "@demo/shared": "*",
+    "@demo/vue-shared": "*"
+  }
+}

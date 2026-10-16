@@ -1,0 +1,8 @@
+<shared-remote-layout appName="Angular 1 · Relation clients" badge="Angular 21">
+  <a routerLink="/clients" routerLinkActive="active" ariaCurrentWhenActive="page"
+     [routerLinkActiveOptions]="{ exact: true }">Clients</a>
+  <!-- Links to another application: the shell decides which remote renders them. -->
+  <a routerLink="/rapports" routerLinkActive="active" ariaCurrentWhenActive="page">Rapports</a>
+  <a routerLink="/parametres" routerLinkActive="active" ariaCurrentWhenActive="page">Paramètres</a>
+  <router-outlet />
+</shared-remote-layout>

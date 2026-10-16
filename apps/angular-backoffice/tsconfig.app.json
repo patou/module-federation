@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "noEmit": false
+  },
+  "include": [
+    "src/**/*.ts",
+    "../../packages/angular-shared/src/**/*.ts",
+    "../../packages/shared/src/**/*.ts",
+    "../../packages/contracts/src/**/*.ts"
+  ]
+}

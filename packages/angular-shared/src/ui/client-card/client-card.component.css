@@ -1,0 +1,8 @@
+:host { display: block; }
+article { height: 100%; padding: 20px; border: 1px solid #e0e6ee; border-radius: 10px; background: #fff; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+h3 { margin: 12px 0 4px; font-size: 18px; color: #19283c; }
+p { margin: 4px 0; color: #5c6b80; }
+.revenue { font-weight: 700; color: #19283c; }
+a { display: inline-block; margin-top: 10px; color: #b0002a; font-weight: 600; }
+a:focus-visible { outline: 3px solid #c3002f; outline-offset: 3px; }

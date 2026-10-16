@@ -1,0 +1,12 @@
+<article>
+  <div class="top">
+    <demo-status-badge [attr.status]="client().status"></demo-status-badge>
+    <shared-favorite-button [clientId]="client().id" />
+  </div>
+  <h3>{{ client().name }}</h3>
+  <p>{{ client().company }} · {{ client().city }}</p>
+  <p class="revenue">{{ client().revenue | eur }}</p>
+  <a [routerLink]="['/clients', client().id]" [queryParams]="{ source: 'liste' }" fragment="fiche">
+    Voir la fiche de {{ client().name }} →
+  </a>
+</article>

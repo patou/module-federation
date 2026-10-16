@@ -1,0 +1,17 @@
+{
+  "name": "@demo/angular-backoffice",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "ngc -p tsconfig.app.json --noEmit && vite build",
+    "typecheck": "ngc -p tsconfig.app.json --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@demo/angular-shared": "*",
+    "@demo/contracts": "*",
+    "@demo/shared": "*"
+  }
+}

@@ -8,7 +8,7 @@ const router = createRouter({
     : createWebHistory(import.meta.env.BASE_URL),
   routes: [
     { path: "/", redirect: "/clients" },
-    { path: "/:pathMatch(.*)*", component: { template: "<span />" } },
+    { path: "/:pathMatch(.*)*", component: { render: () => null } },
   ],
 });
 const app = createApp(App);

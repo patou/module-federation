@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createRouter, createMemoryHistory } from "vue-router";
-import { bridgeNavigation } from "../apps/vue-remote/src/router-bridge.ts";
+import { bridgeNavigation } from "../packages/vue-shared/src/integration/router-bridge.ts";
 
 test("native remote navigation delegates to the shell without activating locally", async () => {
   const router = createRouter({

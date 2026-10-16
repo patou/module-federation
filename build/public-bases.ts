@@ -1,9 +1,21 @@
-export function publicBases(pagesUrl?: string) {
+/** Federated applications, their local port and the folder used on GitHub Pages. */
+export const remoteApps = {
+  "vue-clients": { federationName: "vue_clients", port: 5001 },
+  "angular-clients": { federationName: "angular_clients", port: 5002 },
+  "vue-backoffice": { federationName: "vue_backoffice", port: 5003 },
+  "angular-backoffice": { federationName: "angular_backoffice", port: 5004 },
+} as const;
+
+export type RemoteApp = keyof typeof remoteApps;
+
+export const remoteAppNames = Object.keys(remoteApps) as RemoteApp[];
+
+export function publicBases(pagesUrl?: string): { shell: string; remotes: Record<RemoteApp, string> } {
   if (!pagesUrl) {
     return {
       shell: "/",
-      vue: "http://localhost:5001/",
-      angular: "http://localhost:5002/",
+      remotes: Object.fromEntries(remoteAppNames.map((app) =>
+        [app, `http://localhost:${remoteApps[app].port}/`])) as Record<RemoteApp, string>,
     };
   }
   const url = new URL(pagesUrl);
@@ -13,7 +25,7 @@ export function publicBases(pagesUrl?: string) {
   const base = url.href.endsWith("/") ? url.href : `${url.href}/`;
   return {
     shell: base,
-    vue: new URL("remotes/vue/", base).href,
-    angular: new URL("remotes/angular/", base).href,
+    remotes: Object.fromEntries(remoteAppNames.map((app) =>
+      [app, new URL(`remotes/${app}/`, base).href])) as Record<RemoteApp, string>,
   };
 }

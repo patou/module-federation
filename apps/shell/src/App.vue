@@ -2,31 +2,39 @@
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 import RemoteOutlet from "./RemoteOutlet.vue";
-import { ownerFor, routeOwnership, type Scenario } from "./route-ownership";
+import { useFavorites } from "@demo/vue-shared";
+import { ownerFor, remoteLabels, routeOwnership, type Scenario } from "./route-ownership";
 
 const route = useRoute();
 const scenario = ref<Scenario>("partial");
 const owner = computed(() => ownerFor(route.fullPath, scenario.value));
 const menu = routeOwnership.filter((entry) => !entry.path.includes(":"));
+// Same store instance as the remotes: @demo/shared is a Module Federation singleton.
+const favorites = useFavorites();
 </script>
 
 <template>
   <header>
     <strong>Migration progressive · Angular → Vue</strong>
-    <span>Shell Vue permanent</span>
+    <span class="header-meta">
+      <span>Shell Vue permanent</span>
+      <span class="favorites" data-testid="favorites-count" aria-live="polite">
+        ★ {{ favorites.count.value }} favori{{ favorites.count.value > 1 ? "s" : "" }}
+      </span>
+    </span>
   </header>
   <div class="layout">
     <aside>
       <nav aria-label="Navigation principale">
         <RouterLink v-for="item in menu" :key="item.path" :to="item.path">
           {{ item.label }}
-          <small>{{ item.owners[scenario] }}</small>
+          <small>{{ remoteLabels[item.owners[scenario]] }}</small>
         </RouterLink>
       </nav>
       <label for="scenario">Scénario de démonstration</label>
       <select id="scenario" v-model="scenario">
         <option value="angular">Avant : tout Angular</option>
-        <option value="partial">Pendant : liste clients en Vue</option>
+        <option value="partial">Pendant : migration partielle</option>
         <option value="vue">Après : tout Vue</option>
       </select>
       <p>La sélection modifie le propriétaire de l’URL, pas l’URL elle-même.</p>
@@ -34,12 +42,12 @@ const menu = routeOwnership.filter((entry) => !entry.path.includes(":"));
     <main>
       <div class="status">
         <code>{{ route.fullPath }}</code>
-        <strong data-testid="owner">{{ owner ?? "aucun remote" }}</strong>
+        <strong data-testid="owner">{{ owner ? remoteLabels[owner] : "aucun remote" }}</strong>
       </div>
       <RemoteOutlet :owner="owner" :path="route.fullPath" />
       <details>
         <summary>Répartition des URL</summary>
-        <ul><li v-for="item in routeOwnership" :key="item.path"><code>{{ item.path }}</code> → {{ item.owners[scenario] }}</li></ul>
+        <ul><li v-for="item in routeOwnership" :key="item.path"><code>{{ item.path }}</code> → {{ remoteLabels[item.owners[scenario]] }}</li></ul>
       </details>
     </main>
   </div>
@@ -52,6 +60,8 @@ body { margin: 0; background: #f6f7fb; color: #202638; font-family: system-ui, s
 <style scoped>
 header { background: #202638; color: white; padding: 22px 28px; display: flex; justify-content: space-between; gap: 20px; }
 header span { font-size: 13px; }
+.header-meta { display: flex; align-items: center; gap: 16px; }
+.favorites { padding: 3px 10px; border-radius: 12px; background: #ffe9a8; color: #4d3800; font-weight: 700; }
 .layout { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 70px); }
 aside { background: white; padding: 24px; border-right: 1px solid #dde1eb; }
 nav { display: grid; gap: 8px; margin-bottom: 32px; }

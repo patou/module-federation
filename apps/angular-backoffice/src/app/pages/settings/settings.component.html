@@ -1,0 +1,13 @@
+<shared-page-header heading="Paramètres" subtitle="Préférences du back-office." />
+<section>
+  <h3>Favoris</h3>
+  <p>{{ favorites.count() }} client(s) en favori. Cet état est partagé avec le shell et toutes les applications.</p>
+  <button type="button" [disabled]="favorites.count() === 0" (click)="favorites.clear()">Vider les favoris</button>
+</section>
+<section>
+  <h3>Notifications</h3>
+  <label>
+    <input type="checkbox" [checked]="notifications()" (change)="notifications.set(!notifications())" />
+    Recevoir les alertes de suivi client
+  </label>
+</section>

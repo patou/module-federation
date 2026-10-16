@@ -1,24 +1,26 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { federation } from "@module-federation/vite";
-import { publicBases } from "../../build/public-bases";
+import { publicBases, remoteAppNames, remoteApps } from "../../build/public-bases";
+import { vueShared } from "../../build/federation";
 
 const bases = publicBases(process.env.PAGES_BASE_URL);
 
 export default defineConfig({
   base: bases.shell,
   plugins: [
-    vue(),
+    vue({ template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith("demo-") } } }),
     federation({
       name: "shell",
-      remotes: {
-        vue_remote: { type: "module", name: "vue_remote", entry: `${bases.vue}remoteEntry.js` },
-        angular_remote: { type: "module", name: "angular_remote", entry: `${bases.angular}remoteEntry.js` },
-      },
-      shared: { vue: { singleton: true } },
+      remotes: Object.fromEntries(remoteAppNames.map((app) => {
+        const name = remoteApps[app].federationName;
+        return [name, { type: "module", name, entry: `${bases.remotes[app]}remoteEntry.js` }];
+      })),
+      shared: vueShared,
       dts: false,
     }),
   ],
   server: { port: 5000, strictPort: true },
+  preview: { port: 5000, strictPort: true },
   build: { target: "es2022" },
 });

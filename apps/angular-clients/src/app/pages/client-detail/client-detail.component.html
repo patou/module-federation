@@ -1,0 +1,23 @@
+<a routerLink="/clients">← Retour aux clients</a>
+@if (client.isLoading()) {
+  <p>Chargement de la fiche…</p>
+} @else if (client.value(); as client) {
+  <div id="fiche">
+    <shared-page-header [heading]="client.name" [subtitle]="'Fiche client · #' + client.id">
+      <shared-favorite-button [clientId]="client.id" />
+    </shared-page-header>
+  </div>
+  <article>
+    <demo-status-badge [attr.status]="client.status"></demo-status-badge>
+    <dl>
+      <dt>Entreprise</dt><dd>{{ client.company }}</dd>
+      <dt>Ville</dt><dd>{{ client.city }}</dd>
+      <dt>Adresse e-mail</dt><dd>{{ client.email }}</dd>
+      <dt>Client depuis</dt><dd>{{ client.since | frDate }}</dd>
+      <dt>Chiffre d’affaires</dt><dd>{{ client.revenue | eur }}</dd>
+    </dl>
+    <p>Source : {{ query()?.get("source") ?? "accès direct" }} · fragment : {{ fragment() ?? "aucun" }}</p>
+  </article>
+} @else {
+  <shared-page-header heading="Client introuvable" subtitle="Cette fiche n’existe pas dans la démonstration." />
+}

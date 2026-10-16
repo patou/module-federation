@@ -1,0 +1,11 @@
+<shared-page-header heading="Rapports" subtitle="Indicateurs calculés par le service summarize() de @demo/shared." />
+@if (summary(); as summary) {
+  <div class="stats">
+    <demo-stat-card label="Clients" [attr.value]="summary.total" hint="dans le portefeuille"></demo-stat-card>
+    <demo-stat-card label="Actifs" [attr.value]="summary.active" hint="statut « Actif »"></demo-stat-card>
+    <demo-stat-card label="Chiffre d’affaires" [attr.value]="summary.revenue | eur" hint="cumulé"></demo-stat-card>
+    <demo-stat-card label="Favoris" [attr.value]="summary.favorites" hint="état partagé entre applications"></demo-stat-card>
+  </div>
+} @else {
+  <p>Calcul des indicateurs…</p>
+}

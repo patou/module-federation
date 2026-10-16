@@ -1,0 +1,9 @@
+:host { display: block; }
+:host > a { display: inline-block; margin-bottom: 18px; color: #b0002a; font-weight: 600; }
+a:focus-visible { outline: 3px solid #c3002f; outline-offset: 3px; }
+article { padding: 22px; border: 1px solid #e0e6ee; border-radius: 10px; background: #fff; }
+dl { display: grid; grid-template-columns: minmax(130px, 1fr) 2fr; gap: 12px; margin: 16px 0; }
+dt { color: #5c6b80; }
+dd { margin: 0; overflow-wrap: anywhere; }
+p { color: #5c6b80; }
+@media (max-width: 500px) { dl { grid-template-columns: 1fr; gap: 4px; } dd { margin-bottom: 10px; } }

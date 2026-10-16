@@ -1,0 +1,5 @@
+:host { display: block; margin-bottom: 24px; }
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+h2 { margin: 0 0 6px; font-size: 23px; color: #19283c; }
+p { margin: 0; color: #5c6b80; }
+.actions { display: flex; gap: 12px; }

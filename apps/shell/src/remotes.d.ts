@@ -1,6 +1,6 @@
-declare module "vue_remote/app" {
-  export const mount: import("@demo/contracts").RemoteApplication["mount"];
-}
-declare module "angular_remote/app" {
-  export const mount: import("@demo/contracts").RemoteApplication["mount"];
-}
+type RemoteMount = import("@demo/contracts").RemoteApplication["mount"];
+
+declare module "vue_clients/app" { export const mount: RemoteMount; }
+declare module "vue_backoffice/app" { export const mount: RemoteMount; }
+declare module "angular_clients/app" { export const mount: RemoteMount; }
+declare module "angular_backoffice/app" { export const mount: RemoteMount; }

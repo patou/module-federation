@@ -1,0 +1,16 @@
+<section class="shared-remote-layout">
+  <header class="shared-remote-layout__header">
+    <div>
+      <span class="shared-remote-layout__eyebrow">APPLICATION ANGULAR</span>
+      <h1>{{ appName() }}</h1>
+    </div>
+    <span class="shared-remote-layout__badge">{{ badge() }}</span>
+  </header>
+  <nav class="shared-remote-layout__nav" [attr.aria-label]="'Navigation ' + appName()">
+    <ng-content select="a" />
+  </nav>
+  <div class="shared-remote-layout__content"><ng-content /></div>
+  <footer class="shared-remote-layout__footer">
+    Mise en page fournie par &#64;demo/angular-shared · rendu sans iframe.
+  </footer>
+</section>

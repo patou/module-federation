@@ -1,0 +1,10 @@
+<shared-page-header heading="Clients" subtitle="Cartes, badges et favoris viennent des bibliothèques partagées." />
+@if (clients.hasValue()) {
+  <div class="grid">
+    @for (client of clients.value(); track client.id) {
+      <shared-client-card [client]="client" />
+    }
+  </div>
+} @else {
+  <p>Chargement des clients…</p>
+}

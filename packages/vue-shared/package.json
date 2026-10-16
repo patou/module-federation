@@ -1,0 +1,14 @@
+{
+  "name": "@demo/vue-shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@demo/contracts": "*",
+    "@demo/shared": "*"
+  }
+}

@@ -2,7 +2,7 @@
 import { ref, watch, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 import type { RemoteHandle, RemoteApplication } from "@demo/contracts";
-import type { RemoteName } from "./route-ownership";
+import { remoteLabels, type RemoteName } from "./route-ownership";
 
 const props = defineProps<{ owner?: RemoteName; path: string }>();
 const router = useRouter();
@@ -17,8 +17,10 @@ let stopped = false;
 let pending = Promise.resolve();
 
 const loaders: Record<RemoteName, () => Promise<RemoteApplication>> = {
-  vue: () => import("vue_remote/app"),
-  angular: () => import("angular_remote/app"),
+  "vue-clients": () => import("vue_clients/app"),
+  "vue-backoffice": () => import("vue_backoffice/app"),
+  "angular-clients": () => import("angular_clients/app"),
+  "angular-backoffice": () => import("angular_backoffice/app"),
 };
 
 function clearRemote() {
@@ -83,9 +85,9 @@ onBeforeUnmount(() => {
 
 <template>
   <p v-if="!owner" role="status">404 — Cette URL ne correspond à aucune page.</p>
-  <p v-if="loading" role="status">Chargement de l’application {{ owner }}…</p>
+  <p v-if="loading" role="status">Chargement de l’application {{ owner && remoteLabels[owner] }}…</p>
   <div v-if="error" role="alert" class="error">
-    <p>Impossible d’afficher l’application {{ owner }} : {{ error }}</p>
+    <p>Impossible d’afficher l’application {{ owner && remoteLabels[owner] }} : {{ error }}</p>
     <button @click="retry++">Réessayer</button>
     <p>Vérifiez que le remote est démarré. Aucun basculement automatique ne masque cette erreur.</p>
   </div>
