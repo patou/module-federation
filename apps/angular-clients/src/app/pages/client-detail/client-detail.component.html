@@ -16,7 +16,7 @@
       <dt>Client depuis</dt><dd>{{ client.since | frDate }}</dd>
       <dt>Chiffre d’affaires</dt><dd>{{ client.revenue | eur }}</dd>
     </dl>
-    <p>Source : {{ query()?.get("source") ?? "accès direct" }} · fragment : {{ fragment() ?? "aucun" }}</p>
+    <p>Source : {{ source() ?? "accès direct" }} · fragment : {{ fragment() ?? "aucun" }}</p>
   </article>
 } @else {
   <shared-page-header heading="Client introuvable" subtitle="Cette fiche n’existe pas dans la démonstration." />

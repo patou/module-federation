@@ -1,5 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, inject, resource } from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { CUSTOM_ELEMENTS_SCHEMA, Component, DestroyRef, inject, input, resource, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
   ClientsService, EurPipe, FavoriteButtonComponent, FrDatePipe, PageHeaderComponent,
@@ -13,13 +12,20 @@ import {
   styleUrl: "./client-detail.component.css",
 })
 export class ClientDetailComponent {
-  private readonly route = inject(ActivatedRoute);
   private readonly clientsService = inject(ClientsService);
-  private readonly params = toSignal(this.route.paramMap);
-  readonly query = toSignal(this.route.queryParamMap);
-  readonly fragment = toSignal(this.route.fragment);
+  /** Route parameter and query parameter, bound by `withComponentInputBinding()`. */
+  readonly id = input.required<string>();
+  readonly source = input<string>();
+  readonly fragment = signal<string | null>(null);
   readonly client = resource({
-    params: () => this.params()?.get("id") ?? "",
+    params: () => this.id(),
     loader: ({ params: id }) => this.clientsService.get(id),
   });
+
+  constructor() {
+    // No toSignal(): @angular/core/rxjs-interop embeds private copies of Angular core internals and
+    // breaks (NG0203) when another remote provides @angular/core. See docs/partage-de-code.md.
+    const subscription = inject(ActivatedRoute).fragment.subscribe((fragment) => this.fragment.set(fragment));
+    inject(DestroyRef).onDestroy(() => subscription.unsubscribe());
+  }
 }

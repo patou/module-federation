@@ -107,11 +107,11 @@ Chaque application Angular suit une structure standalone : [app.routes.ts](../ap
 | Configuration | Paquets | Utilisée par |
 | --- | --- | --- |
 | `vueShared` | `vue`, `@demo/shared` | shell, Vue 1, Vue 2 |
-| `angularShared` | `@angular/core`, `@angular/core/rxjs-interop`, `@angular/common`, `@angular/router`, `@angular/platform-browser`, `rxjs`, `@demo/shared` | Angular 1, Angular 2 |
+| `angularShared` | `@angular/core`, `@angular/common`, `@angular/router`, `@angular/platform-browser`, `rxjs`, `@demo/shared` | Angular 1, Angular 2 |
 
 Tous sont des **singletons** : une seule instance est chargée dans la page, quelle que soit l’application qui l’a fournie en premier. Pour `@demo/shared`, c’est ce qui permet au store `favorites` d’être commun au shell et aux quatre remotes.
 
-> **Piège Angular** : chaque point d’entrée secondaire importé (par exemple `@angular/core/rxjs-interop`, utilisé par `toSignal`) doit être déclaré. Sinon, la seconde application Angular embarque sa propre copie interne du core et échoue avec l’erreur `NG0203` dès que l’autre application a fourni `@angular/core`.
+> **Piège Angular** : n’utilisez pas `@angular/core/rxjs-interop` (`toSignal`, `takeUntilDestroyed`…) dans les remotes. Ce point d’entrée importe des fichiers internes de `@angular/core` au lieu de `@angular/core` lui-même. Lorsqu’il est fourni par une autre application que le core partagé (par exemple Angular 1 alors qu’Angular 2 a fourni le core), il possède son propre contexte d’injection et échoue avec l’erreur `NG0203`. Le déclarer dans `shared` ne suffit pas, car rien ne garantit que les deux modules viennent de la même application. Utilisez plutôt `withComponentInputBinding()` + `input()` pour les paramètres de route, ou une souscription libérée par `DestroyRef`.
 
 Voir [Partage de code](partage-de-code.md) pour le détail des bibliothèques.
 

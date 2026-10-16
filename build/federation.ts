@@ -16,12 +16,12 @@ export const vueShared = {
 
 const angularShare = { singleton: true, requiredVersion: "21.2.0" } as const;
 
-// Every Angular entry point imported by the applications must be listed, secondary entry points
-// included: an unshared @angular/core/rxjs-interop would bundle its own copy of the core internals
-// and fail with NG0203 once another remote provides @angular/core.
+// Every Angular package imported by the applications must be listed. Do not use
+// @angular/core/rxjs-interop (toSignal, takeUntilDestroyed...): it imports private chunks of
+// @angular/core instead of "@angular/core" itself, so when it comes from another remote than the
+// shared core it gets its own injection context and fails with NG0203.
 export const angularShared = {
   "@angular/core": angularShare,
-  "@angular/core/rxjs-interop": angularShare,
   "@angular/common": angularShare,
   "@angular/router": angularShare,
   "@angular/platform-browser": angularShare,

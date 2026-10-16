@@ -116,7 +116,7 @@ Un module singleton est fourni par **la première application qui le charge** : 
 - Une évolution cassante de `@demo/shared` impose de redéployer ensemble toutes les applications qui en dépendent, ou de la publier sous un nouveau nom/une nouvelle version majeure non singleton.
 - Les bibliothèques copiées (`angular-shared`, `vue-shared`) n’imposent pas de coordination : une application redéployée embarque simplement la nouvelle version.
 - Angular est plus strict : toutes les applications Angular partageant `@angular/core` doivent être construites avec la même version d’Angular.
-- Chaque point d’entrée Angular secondaire utilisé (par exemple `@angular/core/rxjs-interop`) doit être déclaré dans `shared`, sinon l’erreur `NG0203` apparaît dès que deux applications Angular cohabitent.
+- Chaque paquet Angular importé doit être déclaré dans `shared`. Évitez `@angular/core/rxjs-interop` : il embarque des fichiers internes du core et provoque l’erreur `NG0203` dès qu’il est fourni par une autre application que `@angular/core` (voir [Architecture](architecture.md#dépendances-partagées-à-lexécution)).
 
 ## Ajouter un élément partagé
 

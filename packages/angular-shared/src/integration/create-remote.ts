@@ -1,7 +1,9 @@
 import { APP_BASE_HREF, LocationStrategy } from "@angular/common";
 import { reflectComponentType, type ApplicationConfig, type Type } from "@angular/core";
 import { createApplication } from "@angular/platform-browser";
-import { Router, provideRouter, withDisabledInitialNavigation, withHashLocation, type Routes } from "@angular/router";
+import {
+  Router, provideRouter, withComponentInputBinding, withDisabledInitialNavigation, withHashLocation, type Routes,
+} from "@angular/router";
 import type { RemoteHandle, RemoteOptions } from "@demo/contracts";
 import { defineDemoElements } from "@demo/shared/ui";
 import { delegateNavigation, MemoryLocationStrategy, shellNavigation } from "./navigation";
@@ -30,7 +32,7 @@ function createConfig(routes: Routes, options?: RemoteOptions): ApplicationConfi
   }] : routes;
   return {
     providers: [
-      provideRouter(applicationRoutes, withDisabledInitialNavigation(),
+      provideRouter(applicationRoutes, withDisabledInitialNavigation(), withComponentInputBinding(),
         ...(!options && hashMode ? [withHashLocation()] : [])),
       ...(options ? [{
         provide: LocationStrategy,
